@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -7,7 +7,17 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { AiOutlineShopping } from 'react-icons/ai';
 
-function NavBar() {
+// redux
+import { connect } from 'react-redux';
+import { getNumbers } from '../actions/getAction';
+
+function NavBar(props) {
+  console.log(props);
+
+  useEffect(() => {
+    getNumbers();
+  }, []);
+
   return (
     <>
       <Navbar bg='dark' variant='dark' expand='lg'>
@@ -21,7 +31,8 @@ function NavBar() {
           <Nav>
             <Form inline>
               <Button variant='secondary'>
-                <AiOutlineShopping size='2em' className='text-light' /> <Badge variant='info'>9</Badge>
+                <AiOutlineShopping size='2em' className='text-light' />
+                <Badge variant='info'> {props.basketProps.basketNumbers} </Badge>
                 <span className='sr-only'>unread messages</span>
               </Button>
             </Form>
@@ -35,4 +46,8 @@ function NavBar() {
   );
 }
 
-export default NavBar;
+const mapStateToProps = (state) => ({
+  basketProps: state.basketState,
+});
+
+export default connect(mapStateToProps, { getNumbers })(NavBar);
